@@ -37,11 +37,11 @@ class HomePage extends StatelessWidget {
                   color: Colors.transparent,
                   child:
                     SearchBar(
-                      colorIcon:Assets.whiteColor,
-                      colorMain: Assets.darkGreyColor,
+                      color_icon:Assets.whiteColor,
+                      color_main: Assets.darkGreyColor,
                       path: '/food_display',
                       action: 'modal',
-                      isForm: false
+                      //isForm: false
                     ),
                 )
             ),

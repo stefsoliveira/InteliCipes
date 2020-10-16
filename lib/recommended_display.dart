@@ -49,7 +49,7 @@ class FoodDisplayPage extends State<FoodDisplay>{
                     tag:'searchbar',
                       child:Material(
                         color: Colors.transparent,
-                        child: SearchBar(colorMain:Assets.whiteColor,colorIcon:Assets.blackColorPlaceholder,barSize: 50,),
+                        child: SearchBar(color_main:Assets.whiteColor,barSize: 50,),
                       )),
                 ),
                 Assets.smallPaddingBox,
