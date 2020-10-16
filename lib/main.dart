@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:projeto_3/http service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:projeto_3/http%20service.dart';
 import 'Categorias.dart';
 import 'assets_handler.dart';
 import 'blocs/theme.dart';
@@ -57,6 +59,7 @@ _buildRoutes(context) {
     '/test_area': (context) => searchBar(),
   };
 }
+
 ///_processData(jsonString) {
 ///  Map<String, dynamic> jsonMaps = jsonDecode(jsonString);
 ///  jsonMaps['alunos']
@@ -75,12 +78,13 @@ class _SplashPage extends State<SplashPage> {
   bool isLoading = false;
   var texto = '';
   var list;
-  _fetchData() async{
+
+  _fetchData() async {
     setState(() {
       isLoading = true;
     });
     final response =
-        await http.get("http://775d32064f7d.ngrok.io/get_recommended");
+        await http.get("${pathControler.getPath()}get_recommended");
 
     setState(() {
       isLoading = false;
@@ -88,15 +92,26 @@ class _SplashPage extends State<SplashPage> {
     texto = response.body.toString();
     return mapData(response.body.toString());
   }
-  mapData(String jsonString){
+
+  mapData(String jsonString) {
     Map<String, dynamic> jsonmap = jsonDecode(jsonString);
     jsonmap['recommended']
-        .map<Receita>((json)=> Receita.fromJson(json))
+        .map<Receita>((json) => Receita.fromJson(json))
         .toList()
-        .forEach((receita)=> receitaController.save(receita));
+        .forEach((receita) => receitaController.save(receita));
     Receita a = receitaController.getAll()[1];
-    print([a.titulo,a.tempo,a.image,a.nIngredientes,a.index,a.preparo,a.tipo]);
-
+    print([
+      a.titulo,
+      a.tempo,
+      a.image,
+      a.nIngredientes,
+      a.index,
+      a.preparo,
+      a.tipo
+    ]);
+  }
+  void saveData(text){
+    pathControler.save(text);
   }
 
   @override
@@ -112,25 +127,30 @@ class _SplashPage extends State<SplashPage> {
             onPressed: _fetchData,
           ),
         ),
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  TextBar(
-                    texto: texto,
-                  ),
-                  GestureDetector(
-                    onTap: () => Helper.go(context, "/home_page"),
-                    child: TextBar(
-                      texto: "Voltar",
-                      size: 25,
+        body: Column(
+            children: [
+              TextFormField(
+                onSaved: saveData,
+              ),
+          isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: [
+                    TextBar(
+                      texto: texto,
                     ),
-                  )
-                ],
-              ));
-
+                    GestureDetector(
+                      onTap: () => Helper.go(context, "/home_page"),
+                      child: TextBar(
+                        texto: "Voltar",
+                        size: 25,
+                      ),
+                    )
+                  ],
+                )
+        ]));
   }
 }
 

@@ -31,9 +31,10 @@ class Assets{
 class InriaSansStyle{
   Color color;
   FontStyle fontStyle;
+  FontWeight fontWeight;
   double size;
   List<Shadow> shadow;
-  InriaSansStyle({this.color, this.fontStyle, this.size,this.shadow});
+  InriaSansStyle({this.fontWeight,this.color, this.fontStyle, this.size,this.shadow});
   get(){
     if (color == null){
       this.color = Colors.black;
@@ -44,6 +45,7 @@ class InriaSansStyle{
     return GoogleFonts.inriaSans(
       fontSize: size,
       fontStyle: fontStyle,
+      fontWeight: fontWeight,
       color: color,
       shadows: shadow
     );
