@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:projeto_3/http service.dart';
+import 'package:projeto_3/http_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:projeto_3/http%20service.dart';
-import 'Categorias.dart';
+import 'package:projeto_3/http_service.dart';
+import 'categories.dart';
 import 'assets_handler.dart';
 import 'blocs/theme.dart';
 import 'infra.dart';
 import 'recommended_display.dart';
 import 'package:provider/provider.dart';
 import 'settings.dart';
-import 'Receitas.dart';
+import 'recipes.dart';
 import 'home_page.dart';
 import 'widgets.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_3/widgets.dart';
-import 'Receitas.dart';
+import 'recipes.dart';
 import 'assets_handler.dart';
 import 'infra.dart';
 
@@ -49,7 +49,7 @@ class FoodDisplayPage extends State<FoodDisplay>{
                     tag:'searchbar',
                       child:Material(
                         color: Colors.transparent,
-                        child: SearchBar(color_main:Assets.whiteColor,color_icon:Assets.blackColorPlaceholder,barSize: 50,),
+                        child: SearchBar(colorMain:Assets.whiteColor,colorIcon:Assets.blackColorPlaceholder,barSize: 50,),
                       )),
                 ),
                 Assets.smallPaddingBox,

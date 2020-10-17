@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_3/widgets.dart';
-import 'package:projeto_3/Receitas.dart';
+import 'package:projeto_3/recipes.dart';
 import 'package:projeto_3/assets_handler.dart';
 import 'package:projeto_3/infra.dart';
 

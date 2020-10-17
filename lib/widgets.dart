@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:projeto_3/assets_handler.dart';
-import 'package:projeto_3/Receitas.dart';
-import 'package:projeto_3/Categorias.dart';
-import 'package:projeto_3/http%20service.dart';
+import 'package:projeto_3/recipes.dart';
+import 'package:projeto_3/categories.dart';
+import 'package:projeto_3/http_service.dart';
 import 'package:projeto_3/infra.dart';
 
 class searchBar extends StatefulWidget {
