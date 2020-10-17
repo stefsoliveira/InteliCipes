@@ -87,7 +87,7 @@ class RecipesPage extends StatelessWidget {
             height: Helper.getScreenHeight(Context),
             decoration: BoxDecoration(
               //borderRadius: BorderRadius.vertical(top:Radius.circular(40)),
-              color: Assets.darkGreyColor,
+              color: Assets.blueColor,
             ),
             child: Column(
               children: [
@@ -98,6 +98,9 @@ class RecipesPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       color: Assets.whiteColor),
+                      child: Container (
+
+                      )
                 ),
                 SizedBox(height: 10,),
                 GestureDetector( // Deslizar para baixo para voltar a tela
@@ -110,7 +113,6 @@ class RecipesPage extends StatelessWidget {
                       tag:'searchbar',
                       child:Material(
                         color: Colors.transparent,
-                        child: SearchBar(colorMain:Assets.whiteColor,colorIcon:Assets.blackColorPlaceholder,barSize: 50,),
                       )),
                 ),
                 Assets.smallPaddingBox,

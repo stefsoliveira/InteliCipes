@@ -636,16 +636,6 @@ class ReceitaDisplay extends StatelessWidget {
   }
 } // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
 
-class ReceitaDisplayState extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-
-
-}
-
 class RecommendedDisplay extends StatelessWidget {
   var _recomendedList = recomendadoController.getAll();
 
