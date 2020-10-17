@@ -78,6 +78,7 @@ class _SplashPage extends State<SplashPage> {
   bool isLoading = false;
   var texto = '';
   var list;
+  var formkey = GlobalKey<FormState>();
 
   _fetchData() async {
     setState(() {
@@ -112,11 +113,13 @@ class _SplashPage extends State<SplashPage> {
   }
   void saveData(text){
     pathControler.save(text);
+    print(pathControler.getPath());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text("Fetch Data JSON"),
         ),
@@ -129,8 +132,23 @@ class _SplashPage extends State<SplashPage> {
         ),
         body: Column(
             children: [
-              TextFormField(
-                onSaved: saveData,
+              Form(
+                key: formkey,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        onSaved: saveData,
+                      ),
+                    ),
+                    RaisedButton(
+                      onPressed: (){
+                        formkey.currentState.save();
+                      },
+                      child: Text("salvar"),
+                    )
+                  ],
+                ),
               ),
           isLoading
               ? Center(

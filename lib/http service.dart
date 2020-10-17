@@ -1,15 +1,18 @@
 class httpInfo{
   String serverPath;
+  httpInfo({this.serverPath});
 }
 
 var pathControler = httpInfoController();
 
 class httpInfoController{
-  httpInfo path;
+  httpInfo path = httpInfo();
   save(String newPath){
-    path.serverPath = newPath;
+    path = httpInfo(
+      serverPath: newPath
+    );
   }
   getPath(){
-    return path;
+    return path.serverPath;
   }
 }

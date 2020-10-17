@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:projeto_3/assets_handler.dart';
 import 'package:projeto_3/Receitas.dart';
 import 'package:projeto_3/Categorias.dart';
+import 'package:projeto_3/http%20service.dart';
 import 'package:projeto_3/infra.dart';
 
 class searchBar extends StatefulWidget {
@@ -183,6 +184,7 @@ class SearchBar extends StatefulWidget {
   double barSize;
   bool isForm;
   String path, action;
+  Function onSaved;
 
   SearchBar(
       {this.isForm,
@@ -190,7 +192,8 @@ class SearchBar extends StatefulWidget {
       this.colorIcon,
       this.barSize,
       this.path,
-      this.action});
+      this.action,
+      this.onSaved});
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -198,6 +201,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   var _controller = TextEditingController();
+  var formkey = GlobalKey<FormState>();
 
   void _ShowModal(BuildContext context) {
     showModalBottomSheet(
@@ -247,73 +251,56 @@ class _SearchBarState extends State<SearchBar> {
     if (isform == true) {
       return Expanded(
         child: Container(
-          child: Row(
-            children: [
-              Assets.smallPaddingBox,
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: _controller,
-                    onTap: () {
-                      setState(() {
-                        _controller.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _controller.text.length);
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: "pesquisar",
+          child: Form(
+            key: formkey,
+            child: Row(
+              children: [
+                Assets.smallPaddingBox,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: TextFormField(
+                      onSaved: widget.onSaved,
+                      autofocus: true,
+                      controller: _controller,
+                      onTap: () {
+                        setState(() {
+                          _controller.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: _controller.text.length);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "pesquisar",
+                      ),
                     ),
                   ),
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    print(_controller.text);
-                  });
-                },
-                icon: Icon(Icons.search),
-              )
-            ],
+                IconButton(
+                  onPressed: () {
+                    formkey.currentState.save();
+                  },
+                  icon: Icon(Icons.search),
+                )
+              ],
+            ),
           ),
-//          child: TextFormField(
-//            controller: _controller,
-//            style: InriaSansStyle(
-//              color: Assets.darkGreyColor,
-//              size: 18,
-//              fontStyle: FontStyle.italic,
-//            ).get(),
-//            decoration: InputDecoration(
-//              contentPadding: EdgeInsets.all(8),
-//              hintText: "Pesquisar",
-//              suffixIcon: IconButton(
-//                  icon: Icon(Icons.clear),
-//                  color: Colors.black,
-//                  onPressed: () {
-//                    print('this');
-//                    _controller.clear();
-//                  }),
-//            ),
-//          ),
         ),
       );
     } else
       return Expanded(
         child: Container(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: Row(
-                children: [
-                  Assets.smallPaddingBox,
-                  Text("Pesquisar...", style: Assets.inriaSans18dim),
-                  Spacer(),
-                  Icon(Icons.search, color: setColor(widget.colorIcon))
-                ],
-              ),
-            )),
+          padding: const EdgeInsets.only(bottom: 0),
+          child: Row(
+            children: [
+              Assets.smallPaddingBox,
+              Text("Pesquisar...", style: Assets.inriaSans18dim),
+              Spacer(),
+              Icon(Icons.search, color: setColor(widget.colorIcon))
+            ],
+          ),
+        )),
       );
   }
 
@@ -653,6 +640,7 @@ class RecommendedDisplay extends StatelessWidget {
     print(_recomendedList.length);
     return Expanded(
       child: Container(
+        width: Helper.getScreenWidth(context) - 16,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             color: Assets.darkGreyColor),
@@ -687,8 +675,8 @@ class RecommendedDisplay extends StatelessWidget {
     var item;
     if (_recomendedList.length == 0) {
       item = Receita();
-    }
-    else item = _recomendedList[index];
+    } else
+      item = _recomendedList[index];
     return ListTile(
       title: _alterDisplay(
         index,
@@ -733,12 +721,12 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
 
   var list;
 
-  _fetchData(pesquisa) async{
+  _fetchData(pesquisa) async {
     setState(() {
       isLoading = true;
     });
     final response =
-    await http.get("http://87f32e69d5a6.ngrok.io/get_recommended");
+        await http.get("${pathControler.getPath()}get_recommended");
 
     setState(() {
       isLoading = false;
@@ -747,15 +735,12 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
     return mapData(response.body.toString());
   }
 
-  mapData(String jsonString){
+  mapData(String jsonString) {
     Map<String, dynamic> jsonmap = jsonDecode(jsonString);
     jsonmap['recommended']
-        .map<Receita>((json)=> Receita.fromJson(json))
+        .map<Receita>((json) => Receita.fromJson(json))
         .toList()
-        .forEach((receita)=> receitaController.save(receita));
-    Receita a = pesquisaController.getAll()[1];
-    print([a.titulo,a.tempo,a.image,a.nIngredientes,a.index,a.preparo,a.tipo]);
-
+        .forEach((receita) => pesquisaController.save(receita));
   }
 
   final _items = pesquisaController.getAll();
@@ -763,51 +748,48 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            color: Assets.darkGreyColor),
-        clipBehavior: Clip.antiAlias,
-        height: Helper.getScreenHeight(context) - 25,
-        width: Helper.getScreenWidth(context),
-        child: isLoading
-        ?  Center(child: CircularProgressIndicator()): Column(
-          children: [
-            Assets.smallPaddingBox,
-            Hero(
-              // animaçao entre as telas
-                tag: 'searchbar',
-                child: Material(
-                  color: Colors.transparent,
-                  child: SearchBar(
-                    colorMain: Assets.whiteColor,
-                    colorIcon: Assets.blackColorPlaceholder,
-                    barSize: 30,
-                    isForm: true,
-                  ),
-                )),
-            Assets.smallPaddingBox,
-            Expanded(
-              child: Container(
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.all(0),
-                  itemCount: _items.length,
-                  itemBuilder: _buildListTile,
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                color: Assets.darkGreyColor),
+            clipBehavior: Clip.antiAlias,
+            height: Helper.getScreenHeight(context) - 25,
+            width: Helper.getScreenWidth(context),
+            child: Column(
+              children: [
+                Assets.smallPaddingBox,
+                SearchBar(
+                  colorMain: Assets.whiteColor,
+                  colorIcon: Assets.blackColorPlaceholder,
+                  barSize: 30,
+                  isForm: true,
+                  onSaved: (input) {
+                    setState(() {
+                      _fetchData(input);
+                    });
+                  },
                 ),
-              ),
-            ),
-          ],
-        )
-
-      ),
-    );
+                Assets.smallPaddingBox,
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Expanded(
+                        child: Container(
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            padding: EdgeInsets.all(0),
+                            itemCount: _items.length,
+                            itemBuilder: _buildListTile,
+                          ),
+                        ),
+                      ),
+              ],
+            )));
   }
 
   Widget _buildListTile(context, index) {
