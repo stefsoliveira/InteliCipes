@@ -8,65 +8,6 @@ import 'package:projeto_3/categories.dart';
 import 'package:projeto_3/http_service.dart';
 import 'package:projeto_3/infra.dart';
 
-class searchBar extends StatefulWidget {
-  @override
-  _searchBar createState() {
-    return _searchBar();
-  }
-} // area de teste que convenientemente se chama searchbar
-
-class _searchBar extends State<searchBar> {
-  var _controler = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Material(
-        color: Colors.grey,
-        child: Scaffold(
-          backgroundColor: Assets.whiteColor,
-          body: Column(
-            children: [
-              InteliBar(
-                leftIcon: Icons.arrow_back,
-                leftPath: '/',
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SearchBar(
-                colorIcon: Assets.whiteColor,
-                isForm: true,
-              ),
-              ColectionBar(),
-              TextBar(
-                texto: 'teste',
-                color: Assets.blackColorPlaceholder,
-                padding: 3,
-              ),
-              TextFormField(
-                controller: _controler,
-                onTap: () {
-                  setState(() {
-                    _controler.clear();
-                  });
-                },
-              )
-              //ReceitaDisplay(titulo:null,ingredientes: [null,null],tempo: null,height_main: 230,image: Assets.Placeholder4,),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-} // area de teste
-
 class InteliBar extends StatelessWidget {
   Color color;
   IconData leftIcon;
@@ -77,11 +18,11 @@ class InteliBar extends StatelessWidget {
 
   InteliBar(
       {this.color,
-      this.leftIcon,
-      this.leftPath,
-      this.rightIcon,
-      this.rightPath,
-      this.title});
+        this.leftIcon,
+        this.leftPath,
+        this.rightIcon,
+        this.rightPath,
+        this.title});
 
   Color setColor(color, placeholder) {
     // aplica um placeholder
@@ -290,16 +231,16 @@ class _SearchBarState extends State<SearchBar> {
       return Expanded(
         child: Container(
             child: Padding(
-          padding: const EdgeInsets.only(bottom: 0),
-          child: Row(
-            children: [
-              Assets.smallPaddingBox,
-              Text("Pesquisar...", style: Assets.inriaSans18dim),
-              Spacer(),
-              Icon(Icons.search, color: setColor(widget.colorIcon))
-            ],
-          ),
-        )),
+              padding: const EdgeInsets.only(bottom: 0),
+              child: Row(
+                children: [
+                  Assets.smallPaddingBox,
+                  Text("Pesquisar...", style: Assets.inriaSans18dim),
+                  Spacer(),
+                  Icon(Icons.search, color: setColor(widget.colorIcon))
+                ],
+              ),
+            )),
       );
   }
 
@@ -333,6 +274,65 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 } // Barra de pesquisa que tem 2 funçoes: Botao,Form. Modal pertence a essa classe
+
+class searchBar extends StatefulWidget {
+  @override
+  _searchBar createState() {
+    return _searchBar();
+  }
+} // area de teste que convenientemente se chama searchbar
+
+class _searchBar extends State<searchBar> {
+  var _controler = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Material(
+        color: Colors.grey,
+        child: Scaffold(
+          backgroundColor: Assets.whiteColor,
+          body: Column(
+            children: [
+              InteliBar(
+                leftIcon: Icons.arrow_back,
+                leftPath: '/',
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SearchBar(
+                colorIcon: Assets.whiteColor,
+                isForm: true,
+              ),
+              ColectionBar(),
+              TextBar(
+                texto: 'teste',
+                color: Assets.blackColorPlaceholder,
+                padding: 3,
+              ),
+              TextFormField(
+                controller: _controler,
+                onTap: () {
+                  setState(() {
+                    _controler.clear();
+                  });
+                },
+              )
+              //ReceitaDisplay(titulo:null,ingredientes: [null,null],tempo: null,height_main: 230,image: Assets.Placeholder4,),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+} // area de teste
 
 class ReceitaDisplay extends StatelessWidget {
   String titulo;
@@ -712,7 +712,6 @@ class ModalSearchPage extends StatefulWidget {
   @override
   _ModalSearchPageState createState() => _ModalSearchPageState();
 }
-
 class _ModalSearchPageState extends State<ModalSearchPage> {
   bool isLoading = false;
 

@@ -5,16 +5,16 @@ import 'package:projeto_3/recipes.dart';
 import 'package:projeto_3/assets_handler.dart';
 import 'package:projeto_3/infra.dart';
 
-class RecommendedDisplay extends StatefulWidget {
+class RecommendedRecipes extends StatefulWidget {
   final items;
 
-  const RecommendedDisplay({Key key, this.items}) : super(key: key);
+  const RecommendedRecipes({Key key, this.items}) : super(key: key);
   @override
-  RecommendedDisplayPage createState() {
-    return RecommendedDisplayPage();
+  RecommendedRecipesPage createState() {
+    return RecommendedRecipesPage();
   }
 }
-class RecommendedDisplayPage extends State<RecommendedDisplay>{
+class RecommendedRecipesPage extends State<RecommendedRecipes>{
   final _items = receitaController.getAll();
   @override
   Widget build(BuildContext context) {

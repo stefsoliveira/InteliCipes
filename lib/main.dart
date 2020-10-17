@@ -8,7 +8,7 @@ import 'categories.dart';
 import 'assets_handler.dart';
 import 'blocs/theme.dart';
 import 'infra.dart';
-import 'recommended_display.dart';
+import 'recommended_recipes.dart';
 import 'package:provider/provider.dart';
 import 'settings.dart';
 import 'recipes.dart';
@@ -53,7 +53,7 @@ _buildRoutes(context) {
   return {
     '/': (context) => SplashPage(),
     '/home_page': (context) => HomePage(),
-    '/food_display': (context) => RecommendedDisplay(),
+    '/food_display': (context) => RecommendedRecipes(),
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
   };
