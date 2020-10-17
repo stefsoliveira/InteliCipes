@@ -5,16 +5,16 @@ import 'package:projeto_3/recipes.dart';
 import 'package:projeto_3/assets_handler.dart';
 import 'package:projeto_3/infra.dart';
 
-class FoodDisplay extends StatefulWidget {
+class RecommendedDisplay extends StatefulWidget {
   final items;
 
-  const FoodDisplay({Key key, this.items}) : super(key: key);
+  const RecommendedDisplay({Key key, this.items}) : super(key: key);
   @override
-  FoodDisplayPage createState() {
-    return FoodDisplayPage();
+  RecommendedDisplayPage createState() {
+    return RecommendedDisplayPage();
   }
 }
-class FoodDisplayPage extends State<FoodDisplay>{
+class RecommendedDisplayPage extends State<RecommendedDisplay>{
   final _items = receitaController.getAll();
   @override
   Widget build(BuildContext context) {

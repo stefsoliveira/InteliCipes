@@ -53,7 +53,7 @@ _buildRoutes(context) {
   return {
     '/': (context) => SplashPage(),
     '/home_page': (context) => HomePage(),
-    '/food_display': (context) => FoodDisplay(),
+    '/food_display': (context) => RecommendedDisplay(),
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
   };

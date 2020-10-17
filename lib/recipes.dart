@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_3/widgets.dart';
+
+import 'assets_handler.dart';
+import 'infra.dart';
 
 class Receita {
   var id, index, tempo, nIngredientes;
@@ -71,3 +75,90 @@ class ReceitaController {
     _receitas = [];
   }
 }
+
+class ViewRecipePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Assets.whiteColor,
+      body: Column(
+        children: [
+          Container(
+            height: Helper.getScreenHeight(context),
+            decoration: BoxDecoration(
+              //borderRadius: BorderRadius.vertical(top:Radius.circular(40)),
+              color: Assets.darkGreyColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+            /*child: Column(
+              children: [
+                SizedBox(height: 20,),
+                Container(
+                  height: 5,
+                  width: Helper.getScreenWidth(context)/1.5,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Assets.whiteColor),
+                ),
+                SizedBox(height: 10,),
+                GestureDetector( // Deslizar para baixo para voltar a tela
+                  onVerticalDragUpdate: (details) {
+                    if(details.delta.dy > 2){
+                      Helper.back(context);
+                    }
+                  },
+                  child: Hero( // animaçao entre as telas
+                      tag:'searchbar',
+                      child:Material(
+                        color: Colors.transparent,
+                        child: SearchBar(colorMain:Assets.whiteColor,colorIcon:Assets.blackColorPlaceholder,barSize: 50,),
+                      )),
+                ),
+                Assets.smallPaddingBox,
+                  ],
+                ];
+            );
+          ),
+         ),
+    ),*/
+
+
+
+      /*
+
+      title: 'Aluno',
+      onSave: () {
+      alunoController.save(aluno);
+      dsiHelper.go(context, '/list_aluno');
+      },
+      body: Wrap(
+      alignment: WrapAlignment.center,
+      runSpacing: Constants.boxSmallHeight.height,
+      children: <Widget>[
+      MaintainPessoaBody(aluno),
+      TextFormField(
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(labelText: 'Matrícula*'),
+      validator: (String value) {
+      return value.isEmpty ? 'Matrícula inválida.' : null;
+      },
+initialValue: aluno.matricula,
+onSaved: (newValue) => aluno.matricula = newValue,
+),
+],
+),
+
+*/
