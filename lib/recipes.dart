@@ -75,3 +75,53 @@ class ReceitaController {
     _receitas = [];
   }
 }
+
+class RecipesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext Context) {
+    return Scaffold(
+      backgroundColor: Assets.whiteColor,
+      body: Column(
+        children: [
+          Container(
+            height: Helper.getScreenHeight(Context),
+            decoration: BoxDecoration(
+              //borderRadius: BorderRadius.vertical(top:Radius.circular(40)),
+              color: Assets.darkGreyColor,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 20,),
+                Container(
+                  height: 5,
+                  width: Helper.getScreenWidth(Context)/1.5,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Assets.whiteColor),
+                ),
+                SizedBox(height: 10,),
+                GestureDetector( // Deslizar para baixo para voltar a tela
+                  onVerticalDragUpdate: (details) {
+                    if(details.delta.dy > 2){
+                      Helper.back(Context);
+                    }
+                  },
+                  child: Hero( // animaçao entre as telas
+                      tag:'searchbar',
+                      child:Material(
+                        color: Colors.transparent,
+                        child: SearchBar(colorMain:Assets.whiteColor,colorIcon:Assets.blackColorPlaceholder,barSize: 50,),
+                      )),
+                ),
+                Assets.smallPaddingBox,
+                Container(
+                  height: Helper.getScreenHeight(Context)-85, // se der problema de overflow incremente esse numero
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

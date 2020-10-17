@@ -334,132 +334,6 @@ class _searchBar extends State<searchBar> {
   }
 } // area de teste
 
-class ReceitaDisplay extends StatelessWidget {
-  String titulo;
-  List ingredientes, preparo;
-  var tempo;
-  double height_main;
-  AssetImage image;
-  Color iconColor;
-
-  ReceitaDisplay(
-      {this.titulo,
-      this.ingredientes,
-      this.tempo,
-      this.height_main,
-      this.image,
-      this.iconColor,
-      this.preparo});
-
-  Widget imageCheck(width) {
-    if (image == null) {
-      return Container(
-        height: height_main - 60,
-        decoration: BoxDecoration(
-          color: Assets.blueColor,
-        ),
-      );
-    } else {
-      return Image.asset(
-        image.assetName,
-        scale: 0.3,
-        width: width,
-      );
-    }
-  }
-
-  setColor(color) {
-    if (color == null)
-      return Assets.blueColor;
-    else
-      return color;
-  }
-
-  getLen(String string, limit) {
-    if (string.length >= limit) {
-      return limit;
-    } else
-      return string.length;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-        print("this $titulo");
-      },
-      child: Container(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          width: Helper.getScreenWidth(context),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
-              )),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            imageCheck(Helper.getScreenWidth(context)),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${this.titulo}".replaceRange(
-                                getLen("$titulo", 16), "$titulo".length, "..."),
-                            style: InriaSansStyle(size: 20).get(),
-                          ),
-                          Assets.smallPaddingBox,
-                          Text(
-                            "$tempo min",
-                            style: InriaSansStyle(
-                                    size: 15, color: Colors.grey.shade900)
-                                .get(),
-                          ),
-                          Icon(
-                            Icons.timer,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "ingredientes: $ingredientes".replaceRange(
-                            getLen("ingredientes: $ingredientes", 35),
-                            "ingredientes: $ingredientes".length,
-                            "..."),
-                        style: InriaSansStyle(
-                          size: 15,
-                          color: Colors.grey,
-                        ).get(),
-                      ),
-                    )
-                  ],
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(Icons.favorite_border,
-                      size: 40, color: setColor(iconColor)),
-                )
-              ],
-            ),
-            Assets.smallPaddingBox
-          ])),
-    );
-  }
-} // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
-
 class TextBar extends StatelessWidget {
   Color color;
   double padding, size;
@@ -470,15 +344,15 @@ class TextBar extends StatelessWidget {
 
   TextBar(
       {this.size = 15,
-      this.color,
-      this.texto = 'placeholder',
-      this.padding,
-      this.style,
-      this.theme = 'dark',
-      this.path,
-      this.action,
-      this.fontWeight,
-      this.fontStyle});
+        this.color,
+        this.texto = 'placeholder',
+        this.padding,
+        this.style,
+        this.theme = 'dark',
+        this.path,
+        this.action,
+        this.fontWeight,
+        this.fontStyle});
 
   setPath(context) {
     if (path == null) {
@@ -535,39 +409,6 @@ class TextBar extends StatelessWidget {
     );
   }
 } // Texto(string) dentro de uma capsula. possuem os themes 'dark' & 'light'.
-
-class ColectionItem extends StatelessWidget {
-  AssetImage image;
-
-  ColectionItem({this.image});
-
-  setImage(image) {
-    if (image == null) {
-      return Container(
-        color: Assets.whiteColor,
-        height: 80,
-        width: 80,
-      );
-    } else {
-      return Image.asset(
-        image.assetName,
-        scale: 1,
-        height: 80,
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      height: 80,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Assets.whiteColor),
-      child: setImage(image),
-    );
-  }
-} // Tile da aba de categorias. Possue uma imagem(asset),titulo(string)
 
 class ColectionBar extends StatelessWidget {
   var _items = categoriaControler.getall();
@@ -630,6 +471,180 @@ class ColectionBar extends StatelessWidget {
     );
   }
 } // Um listView dos Tiles das categorias
+
+class ColectionItem extends StatelessWidget {
+  AssetImage image;
+
+  ColectionItem({this.image});
+
+  setImage(image) {
+    if (image == null) {
+      return Container(
+        color: Assets.whiteColor,
+        height: 80,
+        width: 80,
+      );
+    } else {
+      return Image.asset(
+        image.assetName,
+        scale: 1,
+        height: 80,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      height: 80,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Assets.whiteColor),
+      child: setImage(image),
+    );
+  }
+} // Tile da aba de categorias. Possue uma imagem(asset),titulo(string)
+
+class ReceitaDisplay extends StatelessWidget {
+  String titulo;
+  List ingredientes, preparo;
+  var tempo;
+  double height_main;
+  AssetImage image;
+  Color iconColor;
+
+  ReceitaDisplay(
+      {this.titulo,
+        this.ingredientes,
+        this.tempo,
+        this.height_main,
+        this.image,
+        this.iconColor,
+        this.preparo});
+
+  Widget imageCheck(width) {
+    if (image == null) {
+      return Container(
+        height: height_main - 60,
+        decoration: BoxDecoration(
+          color: Assets.blueColor,
+        ),
+      );
+    } else {
+      return Image.asset(
+        image.assetName,
+        scale: 0.3,
+        width: width,
+      );
+    }
+  }
+
+  setColor(color) {
+    if (color == null)
+      return Assets.blueColor;
+    else
+      return color;
+  }
+
+  getLen(String string, limit) {
+    if (string.length >= limit) {
+      return limit;
+    } else
+      return string.length;
+  }
+
+  void _recommendedRecipe (){
+
+}
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Helper.go(context, '/recipe_page'),
+      /*onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+        print("this $titulo");
+      },*/
+      child: Container(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          width: Helper.getScreenWidth(context),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
+              )),
+          child:
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            imageCheck(Helper.getScreenWidth(context)),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            "${this.titulo}".replaceRange(
+                                getLen("$titulo", 16), "$titulo".length, "..."),
+                            style: InriaSansStyle(size: 20).get(),
+                          ),
+                          Assets.smallPaddingBox,
+                          Text(
+                            "$tempo min",
+                            style: InriaSansStyle(
+                                size: 15, color: Colors.grey.shade900)
+                                .get(),
+                          ),
+                          Icon(
+                            Icons.timer,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        "ingredientes: $ingredientes".replaceRange(
+                            getLen("ingredientes: $ingredientes", 35),
+                            "ingredientes: $ingredientes".length,
+                            "..."),
+                        style: InriaSansStyle(
+                          size: 15,
+                          color: Colors.grey,
+                        ).get(),
+                      ),
+                    )
+                  ],
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Icon(Icons.favorite_border,
+                      size: 40, color: setColor(iconColor)),
+                )
+              ],
+            ),
+            Assets.smallPaddingBox
+          ])),
+    );
+  }
+} // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
+
+class ReceitaDisplayState extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+
+
+}
 
 class RecommendedDisplay extends StatelessWidget {
   var _recomendedList = recomendadoController.getAll();
@@ -712,6 +727,7 @@ class ModalSearchPage extends StatefulWidget {
   @override
   _ModalSearchPageState createState() => _ModalSearchPageState();
 }
+
 class _ModalSearchPageState extends State<ModalSearchPage> {
   bool isLoading = false;
 
@@ -816,9 +832,4 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
   }
 } // Modal de pesquisa que pertence a aba SearchBar
 
-class ReceitaPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext Context) {
-    return Scaffold();
-  }
-} // todo: pagina de likes, pagina de receitas.
+ // todo: pagina de likes, pagina de receitas.

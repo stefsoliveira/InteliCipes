@@ -56,6 +56,7 @@ _buildRoutes(context) {
     '/food_display': (context) => RecommendedRecipes(),
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
+    '/recipe_page' :(context) => RecipesPage(),
   };
 }
 
