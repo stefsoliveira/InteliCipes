@@ -57,11 +57,9 @@ _buildRoutes(context) {
     '/food_display': (context) => RecommendedRecipes(),
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
-    //'/recipe_page': (context) => RecipePage(),
+    '/recipe_page': (context) => RecipePage(),
   };
 }
-
-
 
 ///_processData(jsonString) {
 ///  Map<String, dynamic> jsonMaps = jsonDecode(jsonString);

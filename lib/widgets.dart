@@ -560,12 +560,11 @@ class ReceitaItem extends StatelessWidget {
   void _recommendedRecipe (){
 
 }
-  
   @override
   Widget build(BuildContext context) {
     final _context = context;
-    return InkWell(
-      //onTap: showRecipePage(context),
+    return GestureDetector(
+      onTap: () => Helper.go(context, '/recipe_page'),
       child: Container(
           clipBehavior: Clip.antiAliasWithSaveLayer,
           width: Helper.getScreenWidth(context),
@@ -632,12 +631,6 @@ class ReceitaItem extends StatelessWidget {
           ])),
     );
   }
-
-  showRecipePage(context) {
-    Helper.go(context, '/recipe_page');
-    return new RecipePage(titulo,tempo,preparo,ingredientes);
-      }
-
   } // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
 
 class RecommendedDisplay extends StatelessWidget {

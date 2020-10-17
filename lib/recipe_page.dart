@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
 
-class RecipePage extends StatelessWidget{
+import 'assets_handler.dart';
+
+
+class RecipePage extends StatelessWidget {
   String titulo;
-  List ingredientes;
-  List preparo;
-  var tempo;
+  String ingredientes;
+  String preparo;
+  String tempo;
 
 
-  RecipePage(
-      this.titulo,
-      this.ingredientes,
-      this.preparo,
-      this.tempo,
-      );
+  RecipePage({
+    this.titulo = 'none',
+    this.ingredientes = "[1,2,3,4]",
+    this.preparo = "[1,2,3,4]",
+    this.tempo = "10",
+  });
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(),
-      body: new Container(
-        margin: new EdgeInsets.all(10.0),
-        child: new Material(
-          elevation: 4.0,
-          borderRadius: new BorderRadius.circular(6.0),
-          child: new ListView(
-            children: <Widget>[
-              _getBody(titulo,tempo,preparo,ingredientes),
-            ],
+    return Scaffold(
+        backgroundColor: Assets.darkGreyColor,
+        body:Expanded(
+          child: Container(
+            margin: new EdgeInsets.all(10.0),
+            child: new Material(
+              elevation: 4.0,
+              borderRadius: new BorderRadius.circular(6.0),
+              child: new ListView(
+                children: <Widget>[
+                  _getBody(titulo, tempo, preparo, ingredientes),
+                ],
           ),
         ),
       ),
+    ),
     );
+
   }
 
-  Widget _getBody(titulo,tempo,preparo, ingredientes){
-
+  Widget _getBody(titulo, tempo, preparo, ingredientes) {
     return new Container(
       margin: new EdgeInsets.all(15.0),
       child: new Column(
@@ -58,7 +63,6 @@ class RecipePage extends StatelessWidget{
   }
 
   _getTime(tempo) {
-
     return new Container(
         margin: new EdgeInsets.only(top: 5.0),
         child: new Text(tempo,
@@ -72,14 +76,14 @@ class RecipePage extends StatelessWidget{
 
   _getPreparation(preparo) {
     return new Container(
-      margin: new  EdgeInsets.only(top: 20.0),
+      margin: new EdgeInsets.only(top: 20.0),
       child: new Text(preparo),
     );
   }
 
   _getIngredients(ingredientes) {
     return new Container(
-      margin: new  EdgeInsets.only(top: 20.0),
+      margin: new EdgeInsets.only(top: 20.0),
       child: new Text(ingredientes),
     );
   }
