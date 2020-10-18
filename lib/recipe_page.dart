@@ -8,35 +8,32 @@ class RecipePage extends StatelessWidget {
   String ingredientes;
   String preparo;
   String tempo;
-
+  AssetImage image = Assets.Placeholder1;
 
   RecipePage({
-    this.titulo = 'none',
-    this.ingredientes = "[1,2,3,4]",
-    this.preparo = "[1,2,3,4]",
-    this.tempo = "10",
+    this.titulo = 'Frango ao forno',
+    this.ingredientes = 'Ingredientes: frango, arroz, lentilha ,creme de leite',
+    this.preparo = 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ui officia deserunt mollit anim id est laborum consectetur adipiscing dolore magna aliq',
+    this.tempo = "10min",
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Assets.darkGreyColor,
-        body:Expanded(
-          child: Container(
+        backgroundColor: Assets.whiteColor,
+        body: Container(
             margin: new EdgeInsets.all(10.0),
             child: new Material(
-              elevation: 4.0,
-              borderRadius: new BorderRadius.circular(6.0),
+              color: Colors.white,
               child: new ListView(
                 children: <Widget>[
+                  setImage(image),
                   _getBody(titulo, tempo, preparo, ingredientes),
                 ],
           ),
         ),
       ),
-    ),
     );
-
   }
 
   Widget _getBody(titulo, tempo, preparo, ingredientes) {
@@ -58,7 +55,7 @@ class RecipePage extends StatelessWidget {
     return new Text(titulo,
       style: new TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 20.0),
+          fontSize: 30.0),
     );
   }
 
@@ -67,17 +64,9 @@ class RecipePage extends StatelessWidget {
         margin: new EdgeInsets.only(top: 5.0),
         child: new Text(tempo,
           style: new TextStyle(
-              fontSize: 10.0,
-              color: Colors.grey
+              fontSize: 15.0,
           ),
         )
-    );
-  }
-
-  _getPreparation(preparo) {
-    return new Container(
-      margin: new EdgeInsets.only(top: 20.0),
-      child: new Text(preparo),
     );
   }
 
@@ -87,5 +76,26 @@ class RecipePage extends StatelessWidget {
       child: new Text(ingredientes),
     );
   }
+  _getPreparation(preparo) {
+    return new Container(
+      margin: new EdgeInsets.only(top: 20.0),
+      child: new Text(preparo),
+    );
+  }
+}
 
+setImage(image) {
+  if (image == null) {
+    return Container(
+      color: Assets.blueColor,
+      height: 80,
+      width: 80,
+    );
+  } else {
+    return Image.asset(
+      image.assetName,
+      scale: 1,
+      height: 230,
+    );
+  }
 }
