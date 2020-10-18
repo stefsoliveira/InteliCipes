@@ -58,6 +58,7 @@ _buildRoutes(context) {
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
     '/recipe_page': (context) => RecipePage(),
+    //'/favorites_page': (context) => FavoritesPage(),
   };
 }
 

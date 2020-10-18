@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_3/widgets.dart';
 
 import 'assets_handler.dart';
 
@@ -21,21 +22,33 @@ class RecipePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Assets.whiteColor,
-        body: Container(
-            margin: new EdgeInsets.all(10.0),
-            child: new Material(
-              color: Colors.white,
-              child: new ListView(
+        body: Column(
+            children: [
+              Hero(
+                tag: 'transparentbar',
+                child: Material(
+                  color: Colors.transparent,
+                  child: InteliBar(
+                    color: Colors.transparent,
+                    leftIcon: Icons.arrow_back,
+                    leftPath: '/food_display',
+                    rightIcon: Icons.favorite_border,
+                  ),
+                ),
+              ),
+              Hero(
+                tag: 'imagem da receita',
+                child: setImage(image),
+              ),
+              Column(
                 children: <Widget>[
-                  setImage(image),
-                  _getBody(titulo, tempo, preparo, ingredientes),
-                ],
-          ),
+                  _getBody(titulo, tempo, preparo, ingredientes)
+                  ]
+              ),
+              ],
         ),
-      ),
     );
   }
-
   Widget _getBody(titulo, tempo, preparo, ingredientes) {
     return new Container(
       margin: new EdgeInsets.all(15.0),
