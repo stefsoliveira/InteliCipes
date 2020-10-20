@@ -1,14 +1,49 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:projeto_3/Favoritos.dart';
 import 'dart:convert';
 import 'package:projeto_3/assets_handler.dart';
-import 'package:projeto_3/recipes.dart';
-import 'package:projeto_3/categories.dart';
-import 'package:projeto_3/http_service.dart';
+import 'package:projeto_3/Receitas.dart';
+import 'package:projeto_3/Categorias.dart';
+import 'package:projeto_3/http%20service.dart';
 import 'package:projeto_3/infra.dart';
-import 'package:projeto_3/recipe_page.dart';
+
+class searchBar extends StatefulWidget {
+  @override
+  _searchBar createState() {
+    return _searchBar();
+  }
+} // area de teste que convenientemente se chama searchbar
+
+class _searchBar extends State<searchBar> {
+  var _controler = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Material(
+        color: Colors.grey,
+        child: Scaffold(
+          backgroundColor: Assets.whiteColor,
+          body: Column(
+            children: [
+              RecipePage()
+            ],
+          )
+
+          ),
+        ),
+      );
+  }
+} // area de teste
 
 class InteliBar extends StatelessWidget {
   Color color;
@@ -20,17 +55,14 @@ class InteliBar extends StatelessWidget {
 
   InteliBar(
       {this.color,
-        this.leftIcon,
-        this.leftPath,
-        this.rightIcon,
-        this.rightPath,
-        this.title});
+      this.leftIcon,
+      this.leftPath,
+      this.rightIcon,
+      this.rightPath,
+      this.title});
 
   Color setColor(color, placeholder) {
-    // aplica um placeholder
     if (color == null) {
-      //print('InteliBar setColor = Placeholder');
-      print(color);
       return placeholder;
     } else {
       return color;
@@ -50,10 +82,9 @@ class InteliBar extends StatelessWidget {
   }
 
   setIcon(icon, placeholder) {
-    // aplica um placeholder
+
     if (icon == null) {
-      //print('InteliBar setIcon = Placeholder');
-      //return placeholder;
+
       return null;
     } else {
       return Icon(icon);
@@ -76,7 +107,6 @@ class InteliBar extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
           color: setColor(color, Assets.redColorPlaceholder),
-          // placeholder : Assets.redColorPlaceholder
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -91,10 +121,6 @@ class InteliBar extends StatelessWidget {
                   width: 15,
                 ),
                 placeIcon(context, leftIcon, leftPath),
-                //IconButton(
-                //    icon: setIcon(leftIcon, Icon(Icons.menu)),// placeholder : Icon(Icons.menu),
-                //  onPressed: () => Helper.goReplace(context,leftPath),
-                //),
                 Spacer(),
                 setTitle(
                     title,
@@ -102,13 +128,8 @@ class InteliBar extends StatelessWidget {
                       image: Assets.IntelicipesLogo01,
                       height: 25,
                     )),
-                /*Image(image:Assets.IntelicipesLogo01,height: 25,),*/
                 Spacer(),
                 placeIcon(context, rightIcon, rightPath),
-                //IconButton(
-                //  icon: setIcon(rightIcon, Icon(Icons.more_vert)),// placeholder : Icon(Icons.more_vert),
-                //  onPressed: ()=> Helper.goReplace(context,rightPath),
-                //),
                 SizedBox(
                   width: 15,
                 ),
@@ -233,16 +254,16 @@ class _SearchBarState extends State<SearchBar> {
       return Expanded(
         child: Container(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: Row(
-                children: [
-                  Assets.smallPaddingBox,
-                  Text("Pesquisar...", style: Assets.inriaSans18dim),
-                  Spacer(),
-                  Icon(Icons.search, color: setColor(widget.colorIcon))
-                ],
-              ),
-            )),
+          padding: const EdgeInsets.only(bottom: 0),
+          child: Row(
+            children: [
+              Assets.smallPaddingBox,
+              Text("Pesquisar...", style: Assets.inriaSans18dim),
+              Spacer(),
+              Icon(Icons.search, color: setColor(widget.colorIcon))
+            ],
+          ),
+        )),
       );
   }
 
@@ -277,64 +298,162 @@ class _SearchBarState extends State<SearchBar> {
   }
 } // Barra de pesquisa que tem 2 funçoes: Botao,Form. Modal pertence a essa classe
 
-class searchBar extends StatefulWidget {
-  @override
-  _searchBar createState() {
-    return _searchBar();
-  }
-} // area de teste que convenientemente se chama searchbar
+class ReceitaDisplay extends StatefulWidget {
+  String titulo;
+  var ingredientes, preparo;
+  var tempo;
+  double height_main;
+  AssetImage image;
+  Color iconColor;
+  bool isLiked;
+  var id;
 
-class _searchBar extends State<searchBar> {
-  var _controler = TextEditingController();
+  ReceitaDisplay(
+      {this.titulo,
+      this.ingredientes,
+      this.tempo,
+      this.height_main,
+      this.image,
+      this.iconColor,
+      this.preparo,
+      this.isLiked = false,
+      this.id});
+
+  @override
+  _ReceitaDisplayState createState() => _ReceitaDisplayState();
+}
+
+class _ReceitaDisplayState extends State<ReceitaDisplay> {
+  Widget imageCheck(width) {
+    if (widget.image == null) {
+      return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+          print("this ${widget.titulo} , id: ${widget.id}");//299989
+        },
+        child: Container(
+          height: widget.height_main - 60,
+          decoration: BoxDecoration(
+            color: Assets.blueColor,
+          ),
+        ),
+      );
+    } else {
+      return Image.asset(
+        widget.image.assetName,
+        scale: 0.3,
+        width: width,
+      );
+    }
+  }
+
+  setFav(id){
+    widget.isLiked = favoritosController.isFaved(id);
+    if (widget.isLiked){
+      return Icon(Icons.favorite,
+          size: 40, color: setColor(widget.iconColor));
+    }
+    else
+      return Icon(Icons.favorite_border,
+          size: 40, color: setColor(widget.iconColor));
+  }
+
+  setColor(color) {
+    if (color == null)
+      return Assets.blueColor;
+    else
+      return color;
+  }
+
+  getLen(String string, limit) {
+    if (string.length >= limit) {
+      return limit;
+    } else
+      return string.length;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Material(
-        color: Colors.grey,
-        child: Scaffold(
-          backgroundColor: Assets.whiteColor,
-          body: Column(
+    return Container(
+        clipBehavior: Clip.antiAlias,
+        width: Helper.getScreenWidth(context),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(30),
+            )),
+        child:
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InteliBar(
-                leftIcon: Icons.arrow_back,
-                leftPath: '/',
+              imageCheck(Helper.getScreenWidth(context)),
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${this.widget.titulo}".replaceRange(
+                                  getLen("${widget.titulo}", 14), "${widget
+                                  .titulo}".length, "..."),
+                              style: InriaSansStyle(size: 20).get(),
+                            ),
+                            Assets.smallPaddingBox,
+                            Text(
+                              "${widget.tempo} min",
+                              style: InriaSansStyle(
+                                  size: 15, color: Colors.grey.shade900)
+                                  .get(),
+                            ),
+                            Icon(
+                              Icons.timer,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          "${widget.ingredientes}".replaceRange(
+                              getLen(
+                                  "${widget.ingredientes}", 35),
+                              "${widget.ingredientes}".length,
+                              "..."),
+                          style: InriaSansStyle(
+                            size: 15,
+                            color: Colors.grey,
+                          ).get(),
+                        ),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: GestureDetector(
+                      onTap: (){
+                        favoritosController.update(widget.id);
+                        setState(() {
+                          print(favoritosController.isFaved(widget.id));
+                        });
+                      },
+                      child: setFav(widget.id),
+                    )
+                  )
+                ],
               ),
-              SizedBox(
-                height: 20,
-              ),
-              SearchBar(
-                colorIcon: Assets.whiteColor,
-                isForm: true,
-              ),
-              CategoryBar(),
-              TextBar(
-                texto: 'teste',
-                color: Assets.blackColorPlaceholder,
-                padding: 3,
-              ),
-              TextFormField(
-                controller: _controler,
-                onTap: () {
-                  setState(() {
-                    _controler.clear();
-                  });
-                },
-              )
-              //ReceitaDisplay(titulo:null,ingredientes: [null,null],tempo: null,height_main: 230,image: Assets.Placeholder4,),
-            ],
-          ),
-        ),
-      ),
-    );
+              Assets.smallPaddingBox
+            ]));
   }
-} // area de teste
+} // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
 
 class TextBar extends StatelessWidget {
   Color color;
@@ -346,15 +465,15 @@ class TextBar extends StatelessWidget {
 
   TextBar(
       {this.size = 15,
-        this.color,
-        this.texto = 'placeholder',
-        this.padding,
-        this.style,
-        this.theme = 'dark',
-        this.path,
-        this.action,
-        this.fontWeight,
-        this.fontStyle});
+      this.color,
+      this.texto = 'placeholder',
+      this.padding,
+      this.style,
+      this.theme = 'dark',
+      this.path,
+      this.action,
+      this.fontWeight,
+      this.fontStyle});
 
   setPath(context) {
     if (path == null) {
@@ -412,7 +531,40 @@ class TextBar extends StatelessWidget {
   }
 } // Texto(string) dentro de uma capsula. possuem os themes 'dark' & 'light'.
 
-class CategoryBar extends StatelessWidget {
+class ColectionItem extends StatelessWidget {
+  AssetImage image;
+
+  ColectionItem({this.image});
+
+  setImage(image) {
+    if (image == null) {
+      return Container(
+        color: Assets.whiteColor,
+        height: 80,
+        width: 80,
+      );
+    } else {
+      return Image.asset(
+        image.assetName,
+        scale: 1,
+        height: 80,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      height: 80,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Assets.whiteColor),
+      child: setImage(image),
+    );
+  }
+} // Tile da aba de categorias. Possue uma imagem(asset),titulo(string)
+
+class ColectionBar extends StatelessWidget {
   var _items = categoriaControler.getall();
 
   @override
@@ -456,7 +608,7 @@ class CategoryBar extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 3),
-            child: CategoryItem(
+            child: ColectionItem(
               image: _categoria.image,
             ),
           ),
@@ -474,171 +626,18 @@ class CategoryBar extends StatelessWidget {
   }
 } // Um listView dos Tiles das categorias
 
-class CategoryItem extends StatelessWidget {
-  AssetImage image;
-
-  CategoryItem({this.image});
-
-  setImage(image) {
-    if (image == null) {
-      return Container(
-        color: Assets.whiteColor,
-        height: 80,
-        width: 80,
-      );
-    } else {
-      return Image.asset(
-        image.assetName,
-        scale: 1,
-        height: 80,
-      );
-    }
-  }
-
+class RecommendedDisplay extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      height: 80,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Assets.whiteColor),
-      child: setImage(image),
-    );
-  }
-} // Tile da aba de categorias. Possue uma imagem(asset),titulo(string)
-
-class ReceitaItem extends StatelessWidget {
-  String titulo;
-  List ingredientes, preparo;
-  var tempo;
-  double height_main;
-  AssetImage image;
-  Color iconColor;
-
-  BuildContext _context;
-
-  ReceitaItem(
-      {this.titulo,
-        this.ingredientes,
-        this.tempo,
-        this.height_main,
-        this.image,
-        this.iconColor,
-        this.preparo});
-
-  Widget imageCheck(width) {
-    if (image == null) {
-      return Container(
-        height: height_main - 60,
-        decoration: BoxDecoration(
-          color: Assets.blueColor,
-        ),
-      );
-    } else {
-      return Image.asset(
-        image.assetName,
-        scale: 0.3,
-        width: width,
-      );
-    }
-  }
-
-  setColor(color) {
-    if (color == null)
-      return Assets.blueColor;
-    else
-      return color;
-  }
-
-  getLen(String string, limit) {
-    if (string.length >= limit) {
-      return limit;
-    } else
-      return string.length;
-  }
-
-  void _recommendedRecipe (){
-
+  _RecommendedDisplayState createState() => _RecommendedDisplayState();
 }
-  @override
-  Widget build(BuildContext context) {
-    final _context = context;
-    return GestureDetector(
-      onTap: () => Helper.go(context, '/recipe_page'),
-      child: Container(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          width: Helper.getScreenWidth(context),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
-              )),
-          child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            imageCheck(Helper.getScreenWidth(context)),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${this.titulo}".replaceRange(
-                                getLen("$titulo", 16), "$titulo".length, "..."),
-                            style: InriaSansStyle(size: 20).get(),
-                          ),
-                          Assets.smallPaddingBox,
-                          Text(
-                            "$tempo min",
-                            style: InriaSansStyle(
-                                size: 15, color: Colors.grey.shade900)
-                                .get(),
-                          ),
-                          Icon(
-                            Icons.timer,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "ingredientes: $ingredientes".replaceRange(
-                            getLen("ingredientes: $ingredientes", 35),
-                            "ingredientes: $ingredientes".length,
-                            "..."),
-                        style: InriaSansStyle(
-                          size: 15,
-                          color: Colors.grey,
-                        ).get(),
-                      ),
-                    )
-                  ],
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(Icons.favorite_border,
-                      size: 40, color: setColor(iconColor)),
-                )
-              ],
-            ),
-            Assets.smallPaddingBox
-          ])),
-    );
-  }
-  } // Tile que mostra uma imagem(asset), titulo(string), tempo(int), ingredientes(list). Pode ser usado ''standalone''.
 
-class RecommendedDisplay extends StatelessWidget {
+class _RecommendedDisplayState extends State<RecommendedDisplay> {
+
   var _recomendedList = recomendadoController.getAll();
 
   @override
   Widget build(BuildContext context) {
-    print(_recomendedList.length);
+    var len = _recomendedList.length;
     return Expanded(
       child: Container(
         width: Helper.getScreenWidth(context) - 16,
@@ -649,19 +648,38 @@ class RecommendedDisplay extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextBar(
-                texto: "Recomendados",
-                theme: 'light',
-                size: 15,
-              ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextBar(
+                    texto: "Recomendados",
+                    theme: 'light',
+                    size: 15,
+                  ),
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: (){
+                    print(favoritosController.getall());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextBar(
+                      texto: "print",
+                      theme: 'light',
+                      size: 15,
+                    ),
+                  ),
+                ),
+
+              ],
             ),
             Expanded(
               child: Container(
                 child: ListView.builder(
                   padding: EdgeInsets.all(1),
-                  itemCount: (1),
+                  itemCount: len,
                   itemBuilder: _buildList,
                 ),
               ),
@@ -673,7 +691,7 @@ class RecommendedDisplay extends StatelessWidget {
   }
 
   Widget _buildList(context, index) {
-    var item;
+    Receita item;
     if (_recomendedList.length == 0) {
       item = Receita();
     } else
@@ -681,16 +699,16 @@ class RecommendedDisplay extends StatelessWidget {
     return ListTile(
       title: _alterDisplay(
         index,
-        ReceitaItem(
+        ReceitaDisplay(
           titulo: item.titulo,
           tempo: item.tempo,
           ingredientes: item.ingredientes,
+          id: item.index,
           height_main: 240,
         ),
         Center(
           child: TextBar(
             path: '/food_display',
-            //todo: area de recomendado
             action: 'go',
             texto: "mais...",
             size: 20,
@@ -700,11 +718,12 @@ class RecommendedDisplay extends StatelessWidget {
         ),
       ),
     );
-  }
+  }//todo: area de recomendado
 
   _alterDisplay(index, widget1, widget2) {
-    if (index < _recomendedList.length)
+    if (index <= _recomendedList.length-2) {
       return widget1;
+    }
     else
       return widget2;
   }
@@ -723,28 +742,31 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
   var list;
 
   _fetchData(pesquisa) async {
+    pesquisaController.clear();
     setState(() {
       isLoading = true;
     });
     final response =
-        await http.get("${pathControler.getPath()}get_recommended");
+        await http.get("${pathControler.getPath()}search_name/$pesquisa");
 
-    setState(() {
-      isLoading = false;
-    });
+
     texto = response.body.toString();
     return mapData(response.body.toString());
   }
 
   mapData(String jsonString) {
     Map<String, dynamic> jsonmap = jsonDecode(jsonString);
-    jsonmap['recommended']
+    jsonmap['pesquisa']
         .map<Receita>((json) => Receita.fromJson(json))
         .toList()
         .forEach((receita) => pesquisaController.save(receita));
+    _items = pesquisaController.getAll();
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  final _items = pesquisaController.getAll();
+  var _items = pesquisaController.getAll();
 
   @override
   Widget build(BuildContext context) {
@@ -795,7 +817,7 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
 
   Widget _buildListTile(context, index) {
     var __receita = _items;
-    var _receita = __receita[index];
+    Receita _receita = __receita[index];
     return ListTile(
       visualDensity: VisualDensity.compact,
       title: Container(
@@ -807,11 +829,12 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
                     offset: Offset(0, 3),
                     blurRadius: 5)
               ]),
-          child: ReceitaItem(
+          child: ReceitaDisplay(
             titulo: _receita.titulo,
             ingredientes: _receita.ingredientes,
             tempo: _receita.tempo,
             image: _receita.image,
+            id: _receita.index,
             height_main: 230,
             iconColor: Assets.blueColor,
           )),
@@ -819,4 +842,85 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
   }
 } // Modal de pesquisa que pertence a aba SearchBar
 
- // todo: pagina de likes, pagina de receitas.
+class RecipePage extends StatelessWidget {
+  String titulo;
+  String ingredientes;
+  String preparo;
+  String tempo;
+
+
+  RecipePage({
+    this.titulo = 'none',
+    this.ingredientes = "[1,2,3,4]",
+    this.preparo = "[1,2,3,4]",
+    this.tempo = "10",
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        margin: new EdgeInsets.all(10.0),
+        child: new Material(
+          elevation: 4.0,
+          borderRadius: new BorderRadius.circular(6.0),
+          child: new ListView(
+            children: <Widget>[
+              _getBody(titulo, tempo, preparo, ingredientes),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _getBody(titulo, tempo, preparo, ingredientes) {
+    return new Container(
+      margin: new EdgeInsets.all(15.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _getTitle(titulo),
+          _getTime(tempo),
+          _getPreparation(preparo),
+          _getIngredients(ingredientes),
+        ],
+      ),
+    );
+  }
+
+  _getTitle(titulo) {
+    return new Text(titulo,
+      style: new TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0),
+    );
+  }
+
+  _getTime(tempo) {
+    return new Container(
+        margin: new EdgeInsets.only(top: 5.0),
+        child: new Text(tempo,
+          style: new TextStyle(
+              fontSize: 10.0,
+              color: Colors.grey
+          ),
+        )
+    );
+  }
+
+  _getPreparation(preparo) {
+    return new Container(
+      margin: new EdgeInsets.only(top: 20.0),
+      child: new Text(preparo),
+    );
+  }
+
+  _getIngredients(ingredientes) {
+    return new Container(
+      margin: new EdgeInsets.only(top: 20.0),
+      child: new Text(ingredientes),
+    );
+  }
+
+} // todo: pagina de likes, pagina de receitas.

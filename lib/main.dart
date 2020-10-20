@@ -1,20 +1,19 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:projeto_3/http_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'categories.dart';
+import 'Categorias.dart';
 import 'assets_handler.dart';
 import 'blocs/theme.dart';
+import 'http service.dart';
 import 'infra.dart';
-import 'recommended_recipes.dart';
+import 'recommended_display.dart';
 import 'package:provider/provider.dart';
 import 'settings.dart';
-import 'recipes.dart';
+import 'Receitas.dart';
 import 'home_page.dart';
 import 'widgets.dart';
-import 'package:projeto_3/recipe_page.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   dbInit();
@@ -54,11 +53,9 @@ _buildRoutes(context) {
   return {
     '/': (context) => SplashPage(),
     '/home_page': (context) => HomePage(),
-    '/food_display': (context) => RecommendedRecipes(),
+    '/food_display': (context) => FoodDisplay(),
     '/settings': (context) => SettingsPage(),
     '/test_area': (context) => searchBar(),
-    '/recipe_page': (context) => RecipePage(),
-    //'/favorites_page': (context) => FavoritesPage(),
   };
 }
 
@@ -77,21 +74,18 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPage extends State<SplashPage> {
-  bool isLoading = false;
+  bool isLoading = true;
   var texto = '';
-  var list;
   var formkey = GlobalKey<FormState>();
 
   _fetchData() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (pathControler.getPath() == null){
+      Future wait = Future.delayed(Duration(seconds: 5));
+      wait.then((value) => Helper.goReplace(context, '/home_page'));
+      return null;
+    }
     final response =
-        await http.get("${pathControler.getPath()}get_recommended");
-
-    setState(() {
-      isLoading = false;
-    });
+    await http.get("${pathControler.getPath()}get_recommended");
     texto = response.body.toString();
     return mapData(response.body.toString());
   }
@@ -101,76 +95,36 @@ class _SplashPage extends State<SplashPage> {
     jsonmap['recommended']
         .map<Receita>((json) => Receita.fromJson(json))
         .toList()
-        .forEach((receita) => receitaController.save(receita));
-    Receita a = receitaController.getAll()[1];
-    print([
-      a.titulo,
-      a.tempo,
-      a.image,
-      a.nIngredientes,
-      a.index,
-      a.preparo,
-      a.tipo
-    ]);
-  }
-  void saveData(text){
-    pathControler.save(text);
-    print(pathControler.getPath());
+        .forEach((receita) => recomendadoController.save(receita));
+    Helper.goReplace(context, '/home_page');
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetchData();
+    // TODO: implement build
     return Scaffold(
-      backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("Fetch Data JSON"),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RaisedButton(
-            child: new Text("Fetch Data"),
-            onPressed: _fetchData,
+      backgroundColor: Assets.blueColor,
+      body: Column(
+        children: [
+
+          Spacer(),
+          Image(image: Assets.IntelicipesLogo01, height: 40,),
+          Assets.smallPaddingBox,
+          Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: new AlwaysStoppedAnimation(Assets.whiteColor),
+            ),
           ),
-        ),
-        body: Column(
-            children: [
-              Form(
-                key: formkey,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        onSaved: saveData,
-                      ),
-                    ),
-                    RaisedButton(
-                      onPressed: (){
-                        formkey.currentState.save();
-                      },
-                      child: Text("salvar"),
-                    )
-                  ],
-                ),
-              ),
-          isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  children: [
-                    TextBar(
-                      texto: texto,
-                    ),
-                    GestureDetector(
-                      onTap: () => Helper.go(context, "/home_page"),
-                      child: TextBar(
-                        texto: "Voltar",
-                        size: 25,
-                      ),
-                    )
-                  ],
-                )
-        ]));
+          Spacer(),
+          RaisedButton(
+            onPressed:() => Helper.goReplace(context, '/home_page'),
+            child: Text("home_page"),
+          )
+        ],
+      ),
+    );
   }
 }
 
