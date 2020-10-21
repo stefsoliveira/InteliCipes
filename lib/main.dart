@@ -59,13 +59,6 @@ _buildRoutes(context) {
   };
 }
 
-///_processData(jsonString) {
-///  Map<String, dynamic> jsonMaps = jsonDecode(jsonString);
-///  jsonMaps['alunos']
-///      .map<Aluno>((json) => Aluno.fromJson(json))
-///      .toList()
-///      .forEach((aluno) => alunoController.save(aluno));
-///}
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
 
@@ -79,24 +72,38 @@ class _SplashPage extends State<SplashPage> {
   var formkey = GlobalKey<FormState>();
 
   _fetchData() async {
+    print("this");
     if (pathControler.getPath() == null){
+      print('no path');
       Future wait = Future.delayed(Duration(seconds: 5));
       wait.then((value) => Helper.goReplace(context, '/home_page'));
       return null;
     }
-    final response =
+    final response1 =
     await http.get("${pathControler.getPath()}get_recommended");
-    texto = response.body.toString();
-    return mapData(response.body.toString());
+    final response2 =
+    await http.get("${pathControler.getPath()}/list_groups");
+    texto = response2.body.toString();
+    mapData1(response1.body.toString());
+    mapData2(response2.body.toString());
+    Helper.goReplace(context, '/home_page');
   }
 
-  mapData(String jsonString) {
+  mapData1(String jsonString) {
     Map<String, dynamic> jsonmap = jsonDecode(jsonString);
     jsonmap['recommended']
         .map<Receita>((json) => Receita.fromJson(json))
         .toList()
         .forEach((receita) => recomendadoController.save(receita));
-    Helper.goReplace(context, '/home_page');
+    print(recomendadoController.getAll());
+  }
+  mapData2(String jsonString) {
+    Map<String, dynamic> jsonmap = jsonDecode(jsonString);
+    jsonmap['grupos']
+        .map<Categorias>((json) => Categorias.fromJson(json))
+        .toList()
+        .forEach((categoria) => categoriaControler.save(categoria));
+    print(categoriaControler.getall());
   }
 
   @override
@@ -119,7 +126,16 @@ class _SplashPage extends State<SplashPage> {
           ),
           Spacer(),
           RaisedButton(
-            onPressed:() => Helper.goReplace(context, '/home_page'),
+            onPressed:() {
+              _fetchData();
+              print("this");
+            },
+            child: Text("fetch"),
+          ),
+          RaisedButton(
+            onPressed:() {
+              Helper.goReplace(context, '/home_page');
+            },
             child: Text("home_page"),
           )
         ],
@@ -155,9 +171,9 @@ void dbInit() {
 //    );
 //    receitaController.save(receita);
 //  }
-  for (int x = 1; x <= 9; x++) {
-    var categoria =
-        Categorias(titulo: "categoria $x", image: y[Random().nextInt(4)]);
-    categoriaControler.save(categoria);
-  }
+//  for (int x = 1; x <= 9; x++) {
+//    var categoria =
+//        Categorias(titulo: "categoria $x", image: y[Random().nextInt(4)]);
+//    categoriaControler.save(categoria);
+//  }
 }

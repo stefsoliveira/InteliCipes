@@ -10,8 +10,8 @@ class Categorias {
 
   factory Categorias.fromJson(Map<String,dynamic> json){
     return Categorias(
-      titulo: json['titulo'],
-      image: json['image']
+      titulo: json['name'],
+//      image: json['image']
     );
   }
 
@@ -33,5 +33,8 @@ class CategoriaControler {
       _listCategorias.add(categoria);
     }
     return categoria;
+  }
+  clear(){
+    _listCategorias = [];
   }
 }

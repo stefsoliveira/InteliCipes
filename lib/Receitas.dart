@@ -25,7 +25,8 @@ class Receita {
       titulo: json['name'],
       index: json['id'],
       ingredientes: json['ingredients'],
-      preparo: json['steps']
+      preparo: json['steps'],
+      tipo: json['cluster_group']
 
     );
   }

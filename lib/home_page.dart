@@ -1,39 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:projeto_3/Categorias.dart';
 import 'package:projeto_3/widgets.dart';
 import 'package:projeto_3/assets_handler.dart';
-import 'package:http/http.dart' as http;
-
-import 'Receitas.dart';
-import 'http service.dart';
 
 class HomePage extends StatelessWidget {
-  bool isLoading = true;
-
-  _fetchData() async {
-    if (pathControler.getPath() == null){
-
-    }
-    else{
-    final response =
-    await http.get("${pathControler.getPath()}get_recommended");
-    return mapData(response.body.toString());
-    }
-  }
-
-  mapData(String jsonString) {
-    recomendadoController.clear();
-    Map<String, dynamic> jsonmap = jsonDecode(jsonString);
-    jsonmap['recommended']
-        .map<Receita>((json) => Receita.fromJson(json))
-        .toList()
-        .forEach((receita) => recomendadoController.save(receita));
-  }
-
   @override
   Widget build(BuildContext context) {
-    _fetchData();
     return GestureDetector(
       onTap: (){
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -51,7 +23,8 @@ class HomePage extends StatelessWidget {
                 color: Colors.transparent,
                 child: InteliBar(
                   color: Assets.blueColor,
-                  leftIcon: Icons.menu,
+                  leftIcon: Icons.refresh,
+                  leftPath: '/',
                   rightIcon: Icons.more_vert,
                   rightPath: '/settings',
                 ),
@@ -82,6 +55,18 @@ class HomePage extends StatelessWidget {
                   theme: 'dark',
                   size: 15,
                 ),
+                Spacer(),
+                GestureDetector(
+                  onTap: (){
+                    print(categoriaControler.getall());
+                  },
+                  child: TextBar(
+                    texto: 'print',
+                    theme: 'dark',
+                  ),
+
+                ),
+                Assets.smallPaddingBox
               ],
             ),
             Padding(
