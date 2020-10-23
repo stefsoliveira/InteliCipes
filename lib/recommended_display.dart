@@ -13,12 +13,12 @@ import 'http service.dart';
 class _ItemFetcher {
   int _pageCount = 0;
 
-  Future<List>fetch(grupo) async {
+  Future<List>fetch(grupo,cluster) async {
     print('fetch');
     List _items = [];
     pesquisaController.clear();
     final response =
-    await http.get("${pathControler.getPath()}/next/$grupo/$_pageCount");
+    await http.get("${pathControler.getPath()}/next/$grupo/$cluster/$_pageCount");
     Map<String, dynamic> jsonmap = jsonDecode(response.body.toString());
     if (jsonmap['pesquisa'] == []){
       return _items;
@@ -34,7 +34,7 @@ class _ItemFetcher {
 
 class FoodDisplay extends StatefulWidget {
   final argument;
-  const FoodDisplay({Key key,@required this.argument}) : super(key: key);
+  const FoodDisplay({Key key,this.argument}) : super(key: key);
   @override
   FoodDisplayPage createState() {
     return FoodDisplayPage();
@@ -58,9 +58,9 @@ class FoodDisplayPage extends State<FoodDisplay>{
 
   void _loadMore() {
     print("loadmore");
-    var grupoIndex = widget.argument;
+    var grupoIndex = widget.argument; /// [0] index [1] cluster
     _isLoading = true;
-    _itemFetcher.fetch(grupoIndex).then((List fetchedList) {
+    _itemFetcher.fetch(grupoIndex[1],grupoIndex[0]).then((List fetchedList) {
       if (fetchedList.isEmpty) {
         setState(() {
           _isLoading = false;

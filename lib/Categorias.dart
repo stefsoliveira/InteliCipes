@@ -3,14 +3,16 @@ import 'package:flutter/cupertino.dart';
 
 class Categorias {
   int id;
-  String titulo;
+  String titulo,grupoID,count;
   AssetImage image;
 
-  Categorias({this.titulo, this.image});
+  Categorias({this.titulo, this.image,this.grupoID,this.count});
 
   factory Categorias.fromJson(Map<String,dynamic> json){
     return Categorias(
       titulo: json['name'],
+      grupoID: json['grupo_id'],
+      count: json['count'],
 //      image: json['image']
     );
   }

@@ -56,16 +56,16 @@ class HomePage extends StatelessWidget {
                   size: 15,
                 ),
                 Spacer(),
-                GestureDetector(
-                  onTap: (){
-                    print(categoriaControler.getall());
-                  },
-                  child: TextBar(
-                    texto: 'print',
-                    theme: 'dark',
-                  ),
-
-                ),
+//                GestureDetector(
+//                  onTap: (){
+//                    print(categoriaControler.getall());
+//                  },
+//                  child: TextBar(
+//                    texto: 'print',
+//                    theme: 'dark',
+//                  ),
+//
+//                ),
                 Assets.smallPaddingBox
               ],
             ),

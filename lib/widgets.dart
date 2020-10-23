@@ -367,6 +367,7 @@ class _ReceitaDisplayState extends State<ReceitaDisplay> {
           }
           _showModal();
           print("this ${widget.titulo} , id: ${widget.id}");//299989
+          print("this ${widget.group} , id: ${widget.id}");//299989
         },
         child: Container(
           height: widget.height_main - 60,
@@ -475,7 +476,7 @@ class _ReceitaDisplayState extends State<ReceitaDisplay> {
                       onTap: (){
                         favoritosController.update(widget.id);
                         setState(() {
-                          print(favoritosController.isFaved(widget.id));
+//                          print(favoritosController.isFaved(widget.id));
                         });
                       },
                       child: setFav(widget.id),
@@ -566,8 +567,9 @@ class TextBar extends StatelessWidget {
 
 class ColectionItem extends StatelessWidget {
   AssetImage image;
+  int cluster;
   int index;
-  ColectionItem({this.index,this.image});
+  ColectionItem({this.index,this.image,this.cluster});
 
   setImage(image) {
     if (image == null) {
@@ -589,7 +591,7 @@ class ColectionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => FoodDisplay(argument: index)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => FoodDisplay(argument: [index,cluster])));
 
       },
       child: Container(
@@ -657,7 +659,8 @@ class _ColectionBarState extends State<ColectionBar> {
             padding: EdgeInsets.symmetric(horizontal: 3),
             child: ColectionItem(
               image: _categoria.image,
-              index: index,
+              index: int.parse(_categoria.count),
+              cluster: int.parse(_categoria.grupoID),
             ),
           ),
           SizedBox(
@@ -684,7 +687,6 @@ class _RecommendedDisplayState extends State<RecommendedDisplay> {
   var _recomendedList = recomendadoController.getAll();
 
 
-
   @override
   Widget build(BuildContext context) {
     var len = _recomendedList.length;
@@ -709,19 +711,19 @@ class _RecommendedDisplayState extends State<RecommendedDisplay> {
                   ),
                 ),
                 Spacer(),
-                GestureDetector(
-                  onTap: (){
-                    print(favoritosController.getall());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextBar(
-                      texto: "print",
-                      theme: 'light',
-                      size: 15,
-                    ),
-                  ),
-                ),
+//                GestureDetector(
+//                  onTap: (){
+////                    print(favoritosController.getall());
+//                  },
+//                  child: Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: TextBar(
+//                      texto: "print",
+//                      theme: 'light',
+//                      size: 15,
+//                    ),
+//                  ),
+//                ),
 
               ],
             ),
@@ -1064,17 +1066,20 @@ class RecipeDisplay extends StatelessWidget {
                           SimmilarRecipes(
                           titulo: 'Receitas similares por calorias',
                             id: id,
-                            path: group,
+                            path: group[0],
+                            grupo: '0',
                         ),
                           SimmilarRecipes(
-                            path: group,
+                            path: group[1],
                             id: id,
                             titulo: 'Receitas similares por proteinas',
+                            grupo: '1',
                           ),
                           SimmilarRecipes(
-                            path: group,
+                            path: group[2],
                             id: id,
                             titulo: 'Receitas similares por açucares',
+                            grupo: '2',
                           ),
                         ]
                       )
@@ -1088,13 +1093,32 @@ class RecipeDisplay extends StatelessWidget {
                       Container(
                         width: Helper.getScreenWidth(context) - 8,
                         child: TextBar(
-                          theme: 'light',
-                          texto: "Ingredientes: $ingredientes".replaceAll("[", '').replaceAll("'", '').replaceAll(']', ''),
+                          theme: 'dark',
+                          texto: "Ingredientes:",
                           size: 20,
                         ),
-                      )
+                      ),
                     ],
                   ),
+                ),
+                Container(
+                  width: Helper.getScreenWidth(context) - 8,
+                  child: TextBar(
+                    theme: 'light',
+                    texto: '$ingredientes'.replaceAll("[", '').replaceAll("'", '').replaceAll(']', ''),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: Helper.getScreenWidth(context) - 8,
+                      child: TextBar(
+                        texto: "Modo de Preparo: ",
+                        theme: 'dark',
+                        size: 20,
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.all(4),
@@ -1102,12 +1126,10 @@ class RecipeDisplay extends StatelessWidget {
                     width: Helper.getScreenWidth(context) - 8,
                     child: TextBar(
                       theme: 'light',
-                      texto: "Modo de Preparo: \n -$preparo"
+                      texto: "-$preparo"
                           .replaceAll("]", '')
-                          .replaceAll("', '", '\n\n -')
+                          .replaceAll("', '", '\n -')
                           .replaceAll("[", ''),
-                      size: 20,
-
                     ),
                   ),
                 )
@@ -1128,8 +1150,9 @@ class SimmilarRecipes extends StatefulWidget{
   String titulo;
   String path;
   String id;
+  String grupo;
 
-  SimmilarRecipes({this.titulo = 'Placeholder',this.id,this.path});
+  SimmilarRecipes({this.titulo = 'Placeholder',this.id,this.path,this.grupo});
   @override
   _SimmilarRecipesState createState() => _SimmilarRecipesState();
 }
@@ -1147,13 +1170,13 @@ class _SimmilarRecipesState extends State<SimmilarRecipes> {
     _isLoading = true;
     _hasMore = true;
     _loadMore();
-    print('init');
+//    print('init');
   }
 
   void _loadMore() {
-    print("loadmore");
+//    print("loadmore");
     _isLoading = true;
-    _itemFetcher.fetch(widget.path).then((List fetchedList) {
+    _itemFetcher.fetch(widget.grupo,widget.path).then((List fetchedList) {
       if (fetchedList.isEmpty) {
         setState(() {
           _isLoading = false;
@@ -1224,12 +1247,12 @@ class _SimmilarRecipesState extends State<SimmilarRecipes> {
 class _ItemFetcher {
   int _pageCount = 0;
 
-  Future<List>fetch(grupo) async {
+  Future<List>fetch(grupo,cluster) async {
     print('fetch :$grupo');
     List _items = [];
     pesquisaController.clear();
     final response =
-    await http.get("${pathControler.getPath()}/next/$grupo/$_pageCount");
+    await http.get("${pathControler.getPath()}/next/$grupo/$cluster/$_pageCount");
     Map<String, dynamic> jsonmap = jsonDecode(response.body.toString());
     if (jsonmap['pesquisa'] == []){
       return _items;

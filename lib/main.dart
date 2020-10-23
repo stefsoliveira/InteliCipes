@@ -72,9 +72,9 @@ class _SplashPage extends State<SplashPage> {
   var formkey = GlobalKey<FormState>();
 
   _fetchData() async {
-    print("this");
+//    print("this");
     if (pathControler.getPath() == null){
-      print('no path');
+//      print('no path');
       Future wait = Future.delayed(Duration(seconds: 5));
       wait.then((value) => Helper.goReplace(context, '/home_page'));
       return null;
@@ -84,6 +84,8 @@ class _SplashPage extends State<SplashPage> {
     final response2 =
     await http.get("${pathControler.getPath()}/list_groups");
     texto = response2.body.toString();
+    recomendadoController.clear();
+    categoriaControler.clear();
     mapData1(response1.body.toString());
     mapData2(response2.body.toString());
     Helper.goReplace(context, '/home_page');
@@ -95,7 +97,7 @@ class _SplashPage extends State<SplashPage> {
         .map<Receita>((json) => Receita.fromJson(json))
         .toList()
         .forEach((receita) => recomendadoController.save(receita));
-    print(recomendadoController.getAll());
+//    print(recomendadoController.getAll());
   }
   mapData2(String jsonString) {
     Map<String, dynamic> jsonmap = jsonDecode(jsonString);
@@ -103,11 +105,12 @@ class _SplashPage extends State<SplashPage> {
         .map<Categorias>((json) => Categorias.fromJson(json))
         .toList()
         .forEach((categoria) => categoriaControler.save(categoria));
-    print(categoriaControler.getall());
+//    print(categoriaControler.getall());
   }
 
   @override
   Widget build(BuildContext context) {
+    pathControler.save('http://50afed662cd8.ngrok.io/');
     _fetchData();
     // TODO: implement build
     return Scaffold(
@@ -116,7 +119,9 @@ class _SplashPage extends State<SplashPage> {
         children: [
 
           Spacer(),
-          Image(image: Assets.IntelicipesLogo01, height: 40,),
+          GestureDetector(
+              onTap: () => Helper.goReplace(context, "/home_page"),
+              child: Image(image: Assets.IntelicipesLogo01, height: 40,)),
           Assets.smallPaddingBox,
           Center(
             child: CircularProgressIndicator(
@@ -125,19 +130,6 @@ class _SplashPage extends State<SplashPage> {
             ),
           ),
           Spacer(),
-          RaisedButton(
-            onPressed:() {
-              _fetchData();
-              print("this");
-            },
-            child: Text("fetch"),
-          ),
-          RaisedButton(
-            onPressed:() {
-              Helper.goReplace(context, '/home_page');
-            },
-            child: Text("home_page"),
-          )
         ],
       ),
     );
