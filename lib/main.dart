@@ -70,19 +70,23 @@ class _SplashPage extends State<SplashPage> {
   bool isLoading = true;
   var texto = '';
   var formkey = GlobalKey<FormState>();
+  bool timer = false;
 
   _fetchData() async {
 //    print("this");
     if (pathControler.getPath() == null){
-//      print('no path');
-      Future wait = Future.delayed(Duration(seconds: 5));
-      wait.then((value) => Helper.goReplace(context, '/home_page'));
-      return null;
+      pathControler.save('http://5e0f3902c114.ngrok.io/');
     }
     final response1 =
     await http.get("${pathControler.getPath()}get_recommended");
     final response2 =
     await http.get("${pathControler.getPath()}/list_groups");
+    print(response1.statusCode);
+    if (response1.statusCode != 200){
+      Future wait = Future.delayed(Duration(seconds: 5));
+      wait.then((value) => Helper.goReplace(context, '/home_page'));
+      return null;
+    }
     texto = response2.body.toString();
     recomendadoController.clear();
     categoriaControler.clear();
@@ -107,17 +111,20 @@ class _SplashPage extends State<SplashPage> {
         .forEach((categoria) => categoriaControler.save(categoria));
 //    print(categoriaControler.getall());
   }
+  Future timerTick(){
+    Future wait = Future.delayed(Duration(seconds: 10));
+    wait.then((value) => timer = true);
 
+
+  }
   @override
   Widget build(BuildContext context) {
-    pathControler.save('http://50afed662cd8.ngrok.io/');
     _fetchData();
     // TODO: implement build
     return Scaffold(
       backgroundColor: Assets.blueColor,
       body: Column(
         children: [
-
           Spacer(),
           GestureDetector(
               onTap: () => Helper.goReplace(context, "/home_page"),
@@ -129,6 +136,12 @@ class _SplashPage extends State<SplashPage> {
               valueColor: new AlwaysStoppedAnimation(Assets.whiteColor),
             ),
           ),
+          timer ? TextBar(
+            texto: 'Tap the Intelicipes logo to skip the loading.',
+            theme: 'light',
+            size: 7,
+          )
+          : Assets.smallPaddingBox,
           Spacer(),
         ],
       ),

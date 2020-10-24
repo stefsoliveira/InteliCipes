@@ -749,30 +749,17 @@ class _RecommendedDisplayState extends State<RecommendedDisplay> {
     } else
       item = _recomendedList[index];
     return ListTile(
-      title: _alterDisplay(
-        index,
-        ReceitaDisplay(
-          titulo: item.titulo,
-          tempo: item.tempo,
-          ingredientes: item.ingredientes,
-          preparo: item.preparo,
-          id: item.index,
-          height_main: 240,
-          group: item.tipo,
-        ),
-        Center(
-          child: TextBar(
-            path: '/food_display',
-            action: 'go',
-            texto: "mais...",
-            size: 20,
-            padding: 15,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      title: ReceitaDisplay(
+        titulo: item.titulo,
+        tempo: item.tempo,
+        ingredientes: item.ingredientes,
+        preparo: item.preparo,
+        id: item.index,
+        height_main: 240,
+        group: item.tipo,
       ),
     );
-  }//todo: area de recomendado
+  }
 
   _alterDisplay(index, widget1, widget2) {
     if (index <= _recomendedList.length-2) {
@@ -854,7 +841,11 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
                 ),
                 Assets.smallPaddingBox,
                 isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Assets.whiteColor),
+                    strokeWidth: 2,
+                  ),)
                     : Expanded(
                         child: Container(
                           child: ListView.builder(
@@ -897,89 +888,6 @@ class _ModalSearchPageState extends State<ModalSearchPage> {
     );
   }
 } // Modal de pesquisa que pertence a aba SearchBar
-
-class RecipePage extends StatelessWidget {
-  String titulo;
-  String ingredientes;
-  String preparo;
-  String tempo;
-
-
-  RecipePage({
-    this.titulo = 'none',
-    this.ingredientes = "[1,2,3,4]",
-    this.preparo = "[1,2,3,4]",
-    this.tempo = "10",
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: new EdgeInsets.all(10.0),
-        child: new Material(
-          elevation: 4.0,
-          borderRadius: new BorderRadius.circular(6.0),
-          child: new ListView(
-            children: <Widget>[
-              _getBody(titulo, tempo, preparo, ingredientes),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _getBody(titulo, tempo, preparo, ingredientes) {
-    return new Container(
-      margin: new EdgeInsets.all(15.0),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _getTitle(titulo),
-          _getTime(tempo),
-          _getPreparation(preparo),
-          _getIngredients(ingredientes),
-        ],
-      ),
-    );
-  }
-
-  _getTitle(titulo) {
-    return new Text(titulo,
-      style: new TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20.0),
-    );
-  }
-
-  _getTime(tempo) {
-    return new Container(
-        margin: new EdgeInsets.only(top: 5.0),
-        child: new Text(tempo,
-          style: new TextStyle(
-              fontSize: 10.0,
-              color: Colors.grey
-          ),
-        )
-    );
-  }
-
-  _getPreparation(preparo) {
-    return new Container(
-      margin: new EdgeInsets.only(top: 20.0),
-      child: new Text(preparo),
-    );
-  }
-
-  _getIngredients(ingredientes) {
-    return new Container(
-      margin: new EdgeInsets.only(top: 20.0),
-      child: new Text(ingredientes),
-    );
-  }
-
-} // todo: pagina de likes, pagina de receitas.
 
 class RecipeDisplay extends StatelessWidget {
   String titulo;
